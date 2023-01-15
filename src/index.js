@@ -5,7 +5,7 @@ import App from "./App";
 import "./index.css";
 
 const image =
-  "url(https://w1.pngwing.com/pngs/13/880/png-transparent-cartoon-explosion-sprite-animation-drawing-pixel-art-special-effects-walk-cycle-computer-graphics.png)";
+  "url(https://i.stack.imgur.com/pGGbv.png)";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
