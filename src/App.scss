@@ -1,0 +1,191 @@
+.main {
+  display: flex;
+  flex-wrap: nowrap;
+  width: 640px;
+  position: relative;
+}
+
+.circleAndNumber {
+  position: relative;
+  width: 5px;
+  height: 50px;
+  overflow: visible;
+}
+
+.circle {
+  width: 7px;
+  height: 7px;
+  top: 0%;
+  left: 50%;
+  transform: translate(-50%, -25%);
+  background-color: #7a4809;
+  border-radius: 50%;
+  position: absolute;
+  z-index: 1;
+}
+
+.circleOn {
+  width: 10px;
+  height: 10px;
+  background: radial-gradient(
+      73.04% 73.04% at 34.33% 32.26%,
+      #eb99ff 0%,
+      #9823cf 51%,
+      #6a0073 85%,
+      #d700fa 100%
+    ),
+    radial-gradient(
+      50% 50% at 50% 50%,
+      #ffffff 66%,
+      #fefdfd 75%,
+      #f9f5f7 80%,
+      #f2e7ec 83%,
+      #e7d4dd 86%,
+      #dabbc9 89%,
+      #c99cb0 92%,
+      #b57793 94%,
+      #9d4d71 97%,
+      #841e4c 99%,
+      #730034 100%
+    );
+  background-blend-mode: multiply;
+  filter: drop-shadow(0px 0px 2px #760089);
+}
+
+.numberLeft {
+  position: absolute;
+  bottom: 0%;
+  left: 0%;
+  color: white;
+  opacity: 0.8;
+  font-family: "Jost";
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  line-height: 1.43;
+}
+
+.numberRight {
+  position: absolute;
+  bottom: 0%;
+  right: 0%;
+  color: white;
+  opacity: 0.8;
+  font-family: "Jost";
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  line-height: 1.43;
+}
+
+.numberCenter {
+  position: absolute;
+  bottom: 0%;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  opacity: 0.8;
+  font-family: "Jost";
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  line-height: 1.43;
+}
+
+.line {
+  height: 3px;
+  background: linear-gradient(to right, #ee8c01 50%, #7a4809 50%);
+  background-size: 200% 100%;
+  background-position: right bottom;
+  flex-grow: 1;
+  transition: 0.75s;
+  position: relative;
+}
+
+.lineActive {
+  animation-name: lineActivation;
+  animation-duration: 0.75s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes lineActivation {
+  100% {
+    background-position: left bottom;
+    box-shadow: 0px 0px 4px 3px rgba(220, 122, 0, 0.16);
+  }
+}
+
+.numberActive {
+  font-family: "Jost";
+  font-weight: 800;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.43;
+}
+
+.pastNumber {
+  opacity: 0.4;
+}
+
+.icon {
+  width: 25.48px;
+  height: 28.99px;
+  object-position: 100% 100%;
+  position: absolute;
+  left: -14.74px;
+  transform: translateY(-42%);
+  z-index: 2;
+}
+
+.iconRise {
+  animation-duration: 0.75s;
+  animation-name: upriceIcon;
+  animation-fill-mode: forwards;
+}
+
+.iconRight {
+  animation-name: toRightIcon;
+  animation-duration: 0.75s;
+  animation-fill-mode: forwards;
+}
+
+.iconRightLast {
+  animation-name: toRightLast;
+  animation-duration: 0.75s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes toRightLast {
+  100% {
+    left: calc(100% - 10.74px);
+  }
+}
+
+@keyframes toRightIcon {
+  97% {
+    opacity: 1;
+    left: calc(100% - 10.74px);
+  }
+  98% {
+    opacity: 0.5;
+  }
+  100% {
+    left: calc(100% - 10.74px);
+    opacity: 0;
+  }
+}
+
+@keyframes upriceIcon {
+  0% {
+    opacity: 0;
+  }
+  97% {
+    opacity: 0;
+  }
+  98% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}

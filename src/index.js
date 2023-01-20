@@ -1,15 +1,18 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
-import App from "./App";
-import "./index.css";
-
-const image =
-  "url(https://i.stack.imgur.com/pGGbv.png)";
+import "./index.scss";
+import App from "./App.js";
+import Rocket from "./shuffle.png";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <BrowserRouter>
-    <App image={image} />
-  </BrowserRouter>
+  <App
+    url={Rocket}
+    width={200}
+    height={200}
+    rowCount={9}
+    columnCount={8}
+    forwards={true}
+    onAnimationEnd={alert("!!!!")}
+  />
 );
