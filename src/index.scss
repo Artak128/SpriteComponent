@@ -1,3 +1,6 @@
+html {
+  font-size: min(calc(100vh * 16 / 969), calc(100vw * 16 / 1920));
+}
 body {
   display: flex;
   justify-content: center;
@@ -12,4 +15,9 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background: black;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
 }
