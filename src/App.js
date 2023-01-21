@@ -9,7 +9,7 @@ import styled from "styled-components";
  * @param [col] - number of columns in the sprite sheet
  * @param [width] - width of each frame
  * @param [height] - The height of each frame in the sprite sheet.
- * @param [finishFrame] - The last frame of the animation. Not included when have startFrame!!!
+ * @param [finishFrame] - The last frame of the animation. Not included current frame when have startFrame!!!
  * @param [startingFrame] - The frame you want to start from.
  * @returns A string of CSS keyframes.
  */
@@ -21,7 +21,7 @@ function KeyframeGen(
   finishFrame,
   startingFrame
 ) {
-  let str = ``;
+  let frames = ``;
 
   let widthIndex =
     (startingFrame &&
@@ -48,14 +48,13 @@ function KeyframeGen(
   const percent = 100 / framesCount;
 
   for (let i = 0; i < framesCount; i++) {
-    str += `${Math.floor(percent * i * 100) / 100}% {background-position: -${width * widthIndex
+    frames += `${Math.floor(percent * i * 100) / 100}% {background-position: -${width * widthIndex
       }px -${height * heightIndex}px}`;
 
     if (i + 1 >= framesCount) {
-      str += `100% {background-position: -${width * widthIndex}px -${height * heightIndex
+      frames += `100% {background-position: -${width * widthIndex}px -${height * heightIndex
         }px}`;
     }
-
     if (widthIndex + 1 === col) {
       widthIndex = 0;
       heightIndex += 1;
@@ -63,7 +62,7 @@ function KeyframeGen(
       widthIndex += 1;
     }
   }
-  return str;
+  return frames;
 }
 
 const StyledDiv = styled.div`

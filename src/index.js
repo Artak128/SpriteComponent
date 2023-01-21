@@ -13,7 +13,6 @@ root.render(
     width={200}
     height={400}
     loop={true}
-    fps={11}
     rowCount={2}
     columnCount={34}
     forwards={true}
