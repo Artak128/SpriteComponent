@@ -1,20 +1,21 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./index.scss";
 import SpriteAnimation from "./App.js";
 import Rocket from "./rocket_eject.png";
+import "./index.css";
 
-const a = () => alert("!!!!")
+// const a = () => alert("!!!!")
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <SpriteAnimation
     url={Rocket}
     width={200}
-    height={200}
+    height={400}
+    loop={true}
+    fps={11}
     rowCount={2}
     columnCount={34}
     forwards={true}
-    onAnimationEnd={a}
   />
 );

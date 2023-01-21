@@ -9,7 +9,7 @@ import styled from "styled-components";
  * @param [col] - number of columns in the sprite sheet
  * @param [width] - width of each frame
  * @param [height] - The height of each frame in the sprite sheet.
- * @param [finishFrame] - The last frame of the animation.
+ * @param [finishFrame] - The last frame of the animation. Not included when have startFrame!!!
  * @param [startingFrame] - The frame you want to start from.
  * @returns A string of CSS keyframes.
  */
@@ -18,7 +18,7 @@ function KeyframeGen(
   col,
   width,
   height,
-  finishFrame, //Not included when have startFrame !!!
+  finishFrame,
   startingFrame
 ) {
   let str = ``;
@@ -28,8 +28,8 @@ function KeyframeGen(
       (startingFrame <= col
         ? startingFrame - 1
         : startingFrame % col > 0
-        ? (startingFrame % col) - 1
-        : col - 1)) ||
+          ? (startingFrame % col) - 1
+          : col - 1)) ||
     0;
 
   let heightIndex =
@@ -48,14 +48,12 @@ function KeyframeGen(
   const percent = 100 / framesCount;
 
   for (let i = 0; i < framesCount; i++) {
-    str += `${Math.floor(percent * i * 100) / 100}% {background-position: -${
-      width * widthIndex
-    }px -${height * heightIndex}px}`;
+    str += `${Math.floor(percent * i * 100) / 100}% {background-position: -${width * widthIndex
+      }px -${height * heightIndex}px}`;
 
     if (i + 1 >= framesCount) {
-      str += `100% {background-position: -${width * widthIndex}px -${
-        height * heightIndex
-      }px}`;
+      str += `100% {background-position: -${width * widthIndex}px -${height * heightIndex
+        }px}`;
     }
 
     if (widthIndex + 1 === col) {
@@ -83,14 +81,14 @@ const StyledDiv = styled.div`
 
   @keyframes frames {
     ${({ rowCount, columnCount, width, height, finishFrame, startingFrame }) =>
-      KeyframeGen(
-        rowCount,
-        columnCount,
-        width,
-        height,
-        finishFrame,
-        startingFrame
-      )}
+    KeyframeGen(
+      rowCount,
+      columnCount,
+      width,
+      height,
+      finishFrame,
+      startingFrame
+    )}
   }
 `;
 
@@ -135,7 +133,7 @@ SpriteAnimation.propTypes = {
   height: PropTypes.number,
   rowCount: PropTypes.number,
   columnCount: PropTypes.number,
-  url: PropTypes.object,
+  url: PropTypes.string,
   start: PropTypes.bool,
   loop: PropTypes.bool,
   loopCount: PropTypes.number,
@@ -152,12 +150,12 @@ SpriteAnimation.defaultProps = {
   height: 0,
   rowCount: 0,
   columnCount: 0,
-  url: {},
+  url: "",
   start: true,
   loop: false,
   loopCount: 0,
   fps: 30,
-  onAnimationEnd: () => {},
+  onAnimationEnd: () => { },
   finishFrame: null,
   startingFrame: null,
   delay: 0,
