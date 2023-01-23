@@ -102,6 +102,8 @@ function SpriteAnimation({
   start,
   fps,
   onAnimationEnd,
+  onAnimationStart,
+  onIteration,
   finishFrame,
   startingFrame,
   delay,
@@ -119,6 +121,8 @@ function SpriteAnimation({
       loopCount={loopCount}
       fps={(rowCount * columnCount * 1000) / fps}
       onAnimationEnd={onAnimationEnd}
+      onAnimationStart={onAnimationStart}
+      onAnimationIteration={onIteration}
       finishFrame={finishFrame}
       startingFrame={startingFrame}
       delay={delay}
@@ -138,6 +142,8 @@ SpriteAnimation.propTypes = {
   loopCount: PropTypes.number,
   fps: PropTypes.number,
   onAnimationEnd: PropTypes.func,
+  onAnimationStart: PropTypes.func,
+  onIteration: PropTypes.func,
   finishFrame: PropTypes.any,
   startingFrame: PropTypes.any,
   delay: PropTypes.number,
@@ -155,6 +161,8 @@ SpriteAnimation.defaultProps = {
   loopCount: 0,
   fps: 30,
   onAnimationEnd: () => { },
+  onAnimationStart: () => { },
+  onIteration: () => { },
   finishFrame: null,
   startingFrame: null,
   delay: 0,

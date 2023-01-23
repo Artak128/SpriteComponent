@@ -1,20 +1,23 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import SpriteAnimation from "./App.js";
-import Rocket from "./rocket_eject.png";
 import "./index.css";
 
-// const a = () => alert("!!!!")
-
+const a = () => console.log("first!!!")
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <SpriteAnimation
-    url={Rocket}
+    url={"https://www.gamedesigning.org/wp-content/uploads/2020/10/Animating-A-Sprite.jpg"}
     width={200}
     height={400}
-    loop={true}
     rowCount={2}
-    columnCount={34}
+    loop={true}
+    fps={5}
+    columnCount={8}
+    onIteration={a}
+    onAnimationStartCapture={a}
     forwards={true}
+    id={"sprite456"}
+    onAnimationStart={() => console.log("START")}
   />
 );
