@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import SpriteAnimation from "./App.js";
 import "./index.css";
 
-const a = () => console.log("first!!!")
+// const a = () => console.log("first!!!")
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <SpriteAnimation
@@ -11,13 +11,11 @@ root.render(
     width={200}
     height={400}
     rowCount={2}
-    loop={true}
+    loop={false}
+    loopCount={3}
     fps={5}
+    onAnimationEnd={() => console.log("OnEnd")}
     columnCount={8}
-    onIteration={a}
-    onAnimationStartCapture={a}
     forwards={true}
-    id={"sprite456"}
-    onAnimationStart={() => console.log("START")}
   />
 );

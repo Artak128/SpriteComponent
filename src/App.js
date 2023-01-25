@@ -1,6 +1,7 @@
 import { memo } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import { useEffect } from "react";
 
 /**
  * It takes a number of rows and columns, a width and height, and a starting and ending frame, and
@@ -90,7 +91,8 @@ const StyledDiv = styled.div`
     )}
   }
 `;
-
+let refLoop;
+let refEnd;
 function SpriteAnimation({
   width,
   height,
@@ -102,13 +104,44 @@ function SpriteAnimation({
   start,
   fps,
   onAnimationEnd,
-  onAnimationStart,
   onIteration,
   finishFrame,
   startingFrame,
   delay,
   forwards,
 }) {
+
+  useEffect(() => {
+    if (refLoop) {
+      clearInterval(refLoop)
+    }
+    if (loop && start) {
+      setInterval(() => {
+        onIteration()
+      }, (rowCount * columnCount * 1000) / fps);
+    }
+    return () => {
+      clearInterval(refLoop)
+    }
+  }, [loop, rowCount, columnCount, fps, onIteration, start])
+
+  useEffect(() => {
+    const timeout = ((rowCount * columnCount * 1000) / fps) * (loopCount || 1);
+    if (refEnd) {
+      clearInterval(refEnd)
+    }
+    if (!loop && start) {
+      setTimeout(() => {
+        onAnimationEnd()
+      }, timeout);
+    }
+
+    return () => {
+      clearInterval(refEnd)
+    }
+  }, [onAnimationEnd, loopCount, fps, rowCount, columnCount, loop, start])
+
+
   return (
     <StyledDiv
       width={width}
@@ -120,9 +153,6 @@ function SpriteAnimation({
       loop={loop}
       loopCount={loopCount}
       fps={(rowCount * columnCount * 1000) / fps}
-      onAnimationEnd={onAnimationEnd}
-      onAnimationStart={onAnimationStart}
-      onAnimationIteration={onIteration}
       finishFrame={finishFrame}
       startingFrame={startingFrame}
       delay={delay}
@@ -139,10 +169,9 @@ SpriteAnimation.propTypes = {
   url: PropTypes.string,
   start: PropTypes.bool,
   loop: PropTypes.bool,
-  loopCount: PropTypes.number,
+  loopCount: PropTypes.any,
   fps: PropTypes.number,
   onAnimationEnd: PropTypes.func,
-  onAnimationStart: PropTypes.func,
   onIteration: PropTypes.func,
   finishFrame: PropTypes.any,
   startingFrame: PropTypes.any,
@@ -158,10 +187,9 @@ SpriteAnimation.defaultProps = {
   url: "",
   start: true,
   loop: false,
-  loopCount: 0,
+  loopCount: null,
   fps: 30,
   onAnimationEnd: () => { },
-  onAnimationStart: () => { },
   onIteration: () => { },
   finishFrame: null,
   startingFrame: null,
