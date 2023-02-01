@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 
@@ -21,8 +21,8 @@ function KeyframeGen(row, col, width, height, finishFrame, startingFrame) {
       (startingFrame <= col
         ? startingFrame - 1
         : startingFrame % col > 0
-        ? (startingFrame % col) - 1
-        : col - 1)) ||
+          ? (startingFrame % col) - 1
+          : col - 1)) ||
     0;
 
   let heightIndex =
@@ -41,14 +41,12 @@ function KeyframeGen(row, col, width, height, finishFrame, startingFrame) {
   const percent = 100 / framesCount;
 
   for (let i = 0; i < framesCount; i++) {
-    frames += `${Math.floor(percent * i * 100) / 100}% {background-position: -${
-      width * widthIndex
-    }px -${height * heightIndex}px}`;
+    frames += `${Math.floor(percent * i * 100) / 100}% {background-position: -${width * widthIndex
+      }px -${height * heightIndex}px}`;
 
     if (i + 1 >= framesCount) {
-      frames += `100% {background-position: -${width * widthIndex}px -${
-        height * heightIndex
-      }px}`;
+      frames += `100% {background-position: -${width * widthIndex}px -${height * heightIndex
+        }px}`;
     }
     if (widthIndex + 1 === col) {
       widthIndex = 0;
@@ -72,20 +70,24 @@ const StyledDiv = styled.div`
     ${({ loop, loopCount }) => (loop ? "infinite" : loopCount || "")}
     ${({ forwards }) => (forwards ? "forwards" : "backwards")}
     ${({ start }) => (start ? "running" : "paused")};
-
+  &.isPaused{
+  animation-play-state: paused;
+  }
+  
   @keyframes frames {
     ${({ rowCount, columnCount, width, height, finishFrame, startingFrame }) =>
-      KeyframeGen(
-        rowCount,
-        columnCount,
-        width,
-        height,
-        finishFrame,
-        startingFrame
-      )}
+    KeyframeGen(
+      rowCount,
+      columnCount,
+      width,
+      height,
+      finishFrame,
+      startingFrame
+    )}
   }
 `;
 function SpriteAnimation({
+  restart,
   width,
   height,
   rowCount,
@@ -102,8 +104,32 @@ function SpriteAnimation({
   delay,
   forwards,
 }) {
+  const [key, setKey] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+  useEffect(() => {
+    restart && setKey(prev => !prev);
+  }, [restart])
+
+  //****if we want to stop the animation when changing tab//
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        setIsPaused(true);
+      } else {
+        setIsPaused(false);
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, []);
+  //****//
+
   return (
     <StyledDiv
+      className={isPaused ? "isPaused" : ""}
+      key={key}
       width={width}
       height={height}
       rowCount={rowCount}
@@ -124,12 +150,13 @@ function SpriteAnimation({
 }
 
 SpriteAnimation.propTypes = {
+  restart: PropTypes.bool,
   width: PropTypes.number,
   height: PropTypes.number,
   rowCount: PropTypes.number,
   columnCount: PropTypes.number,
   url: PropTypes.string,
-  start: PropTypes.any,
+  start: PropTypes.bool,
   loop: PropTypes.bool,
   loopCount: PropTypes.any,
   fps: PropTypes.number,
@@ -142,6 +169,7 @@ SpriteAnimation.propTypes = {
 };
 
 SpriteAnimation.defaultProps = {
+  restart: false,
   width: 0,
   height: 0,
   rowCount: 0,
@@ -151,8 +179,8 @@ SpriteAnimation.defaultProps = {
   loop: false,
   loopCount: null,
   fps: 30,
-  onAnimationEnd: () => {},
-  onIteration: () => {},
+  onAnimationEnd: () => { },
+  onIteration: () => { },
   finishFrame: null,
   startingFrame: null,
   delay: 0,
@@ -161,12 +189,14 @@ SpriteAnimation.defaultProps = {
 
 function App() {
   const [start, setStart] = useState(true);
+  const [restart, setRestart] = useState(false);
   return (
     <>
       <SpriteAnimation
         url={
           "https://www.gamedesigning.org/wp-content/uploads/2020/10/Animating-A-Sprite.jpg"
         }
+        restart={restart}
         width={200}
         height={400}
         rowCount={2}
@@ -178,9 +208,9 @@ function App() {
         forwards={true}
       />
       <button onClick={() => setStart((prev) => !prev)}>Start/Pause</button>
+      <button onClick={() => setRestart((prev) => !prev)}>Restart</button>
     </>
   );
 }
 
 export default App;
-// export default memo(SpriteAnimation);
