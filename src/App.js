@@ -1,7 +1,6 @@
-import { memo } from "react";
+import { useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { useEffect } from "react";
 
 /**
  * It takes a number of rows and columns, a width and height, and a starting and ending frame, and
@@ -14,14 +13,7 @@ import { useEffect } from "react";
  * @param [startingFrame] - The frame you want to start from.
  * @returns A string of CSS keyframes.
  */
-function KeyframeGen(
-  row,
-  col,
-  width,
-  height,
-  finishFrame,
-  startingFrame
-) {
+function KeyframeGen(row, col, width, height, finishFrame, startingFrame) {
   let frames = ``;
 
   let widthIndex =
@@ -29,8 +21,8 @@ function KeyframeGen(
       (startingFrame <= col
         ? startingFrame - 1
         : startingFrame % col > 0
-          ? (startingFrame % col) - 1
-          : col - 1)) ||
+        ? (startingFrame % col) - 1
+        : col - 1)) ||
     0;
 
   let heightIndex =
@@ -49,12 +41,14 @@ function KeyframeGen(
   const percent = 100 / framesCount;
 
   for (let i = 0; i < framesCount; i++) {
-    frames += `${Math.floor(percent * i * 100) / 100}% {background-position: -${width * widthIndex
-      }px -${height * heightIndex}px}`;
+    frames += `${Math.floor(percent * i * 100) / 100}% {background-position: -${
+      width * widthIndex
+    }px -${height * heightIndex}px}`;
 
     if (i + 1 >= framesCount) {
-      frames += `100% {background-position: -${width * widthIndex}px -${height * heightIndex
-        }px}`;
+      frames += `100% {background-position: -${width * widthIndex}px -${
+        height * heightIndex
+      }px}`;
     }
     if (widthIndex + 1 === col) {
       widthIndex = 0;
@@ -81,18 +75,16 @@ const StyledDiv = styled.div`
 
   @keyframes frames {
     ${({ rowCount, columnCount, width, height, finishFrame, startingFrame }) =>
-    KeyframeGen(
-      rowCount,
-      columnCount,
-      width,
-      height,
-      finishFrame,
-      startingFrame
-    )}
+      KeyframeGen(
+        rowCount,
+        columnCount,
+        width,
+        height,
+        finishFrame,
+        startingFrame
+      )}
   }
 `;
-let refLoop;
-let refEnd;
 function SpriteAnimation({
   width,
   height,
@@ -110,38 +102,6 @@ function SpriteAnimation({
   delay,
   forwards,
 }) {
-
-  useEffect(() => {
-    if (refLoop) {
-      clearInterval(refLoop)
-    }
-    if (loop && start) {
-      setInterval(() => {
-        onIteration()
-      }, (rowCount * columnCount * 1000) / fps);
-    }
-    return () => {
-      clearInterval(refLoop)
-    }
-  }, [loop, rowCount, columnCount, fps, onIteration, start])
-
-  useEffect(() => {
-    const timeout = ((rowCount * columnCount * 1000) / fps) * (loopCount || 1);
-    if (refEnd) {
-      clearInterval(refEnd)
-    }
-    if (!loop && start) {
-      setTimeout(() => {
-        onAnimationEnd()
-      }, timeout);
-    }
-
-    return () => {
-      clearInterval(refEnd)
-    }
-  }, [onAnimationEnd, loopCount, fps, rowCount, columnCount, loop, start])
-
-
   return (
     <StyledDiv
       width={width}
@@ -152,6 +112,8 @@ function SpriteAnimation({
       start={start}
       loop={loop}
       loopCount={loopCount}
+      onAnimationEnd={onAnimationEnd}
+      omAnimationIteration={onIteration}
       fps={(rowCount * columnCount * 1000) / fps}
       finishFrame={finishFrame}
       startingFrame={startingFrame}
@@ -167,7 +129,7 @@ SpriteAnimation.propTypes = {
   rowCount: PropTypes.number,
   columnCount: PropTypes.number,
   url: PropTypes.string,
-  start: PropTypes.bool,
+  start: PropTypes.any,
   loop: PropTypes.bool,
   loopCount: PropTypes.any,
   fps: PropTypes.number,
@@ -185,16 +147,40 @@ SpriteAnimation.defaultProps = {
   rowCount: 0,
   columnCount: 0,
   url: "",
-  start: true,
+  start: false,
   loop: false,
   loopCount: null,
   fps: 30,
-  onAnimationEnd: () => { },
-  onIteration: () => { },
+  onAnimationEnd: () => {},
+  onIteration: () => {},
   finishFrame: null,
   startingFrame: null,
   delay: 0,
   forwards: false,
 };
 
-export default memo(SpriteAnimation);
+function App() {
+  const [start, setStart] = useState(true);
+  return (
+    <>
+      <SpriteAnimation
+        url={
+          "https://www.gamedesigning.org/wp-content/uploads/2020/10/Animating-A-Sprite.jpg"
+        }
+        width={200}
+        height={400}
+        rowCount={2}
+        loopCount={2}
+        start={start}
+        fps={5}
+        onAnimationEnd={() => console.log("OnEnd")}
+        columnCount={8}
+        forwards={true}
+      />
+      <button onClick={() => setStart((prev) => !prev)}>Start/Pause</button>
+    </>
+  );
+}
+
+export default App;
+// export default memo(SpriteAnimation);
